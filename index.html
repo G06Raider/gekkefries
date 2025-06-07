@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>gekkefries's pc</title>
+    <style>
+
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 72%, 100% {
+                opacity: 0.99;
+                text-shadow: 0 0 1px rgba(255,255,255,0.4);
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 71.999% {
+                opacity: 0.4;
+                text-shadow: none;
+            }
+        }
+        
+        @keyframes scanlines {
+            from { background-position: 0 0; }
+            to { background-position: 0 -20px; }
+        }
+
+
+        
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #111;
+    color: #ddd;
+    font-family: 'Courier New', monospace;
+    overflow: hidden;
+    position: relative;
+    height: 100vh;
+    animation: flicker 0.1s infinite alternate;
+    box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
+    border-radius: 5px;
+    cursor: none; 
+}
+
+
+
+        
+body::before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%, 
+        rgba(0, 0, 0, 0.25) 50%
+    );
+    background-size: 100% 4px;
+    z-index: 1000;
+    pointer-events: none;
+    animation: scanlines 0.7s linear infinite;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+        ellipse at center,
+        rgba(0,0,0,0) 0%,
+        rgba(0,0,0,0.7) 100%
+    );
+    z-index: 1001;
+    pointer-events: none;
+}
+        
+        .login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+        
+        .login-box {
+            background-color: #222;
+            border: 1px solid #444;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+        }
+        
+        .profile-pic {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 3px solid #444;
+            object-fit: cover;
+        }
+        
+        .welcome-text {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: #ddd;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #111;
+            border: 1px solid #444;
+            color: #ddd;
+            font-family: 'Courier New', monospace;
+            outline: none;
+        }
+        
+        .submit-btn {
+            background: linear-gradient(to bottom, #444, #222);
+            border: 1px solid #000;
+            color: #ddd;
+            padding: 8px 20px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .submit-btn:hover {
+            background: linear-gradient(to bottom, #555, #333);
+        }
+        
+        .loading-dots {
+            display: none;
+            margin-top: 15px;
+        }
+        
+        .loading-dots span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 3px;
+            animation: bounce 1.4s infinite ease-in-out;
+        }
+        
+        .loading-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .loading-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes bounce {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        
+.desktop {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #111;
+    background-image: url('./files/background.png');
+    background-size: cover; 
+    background-position: center; 
+    background-repeat: no-repeat; 
+    overflow: hidden;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 80px);
+    grid-auto-rows: 90px;
+    gap: 15px;
+    align-content: start;
+}
+        
+        .icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80px;
+            cursor: pointer;
+            text-align: center;
+            user-select: none;
+        }
+        
+        .icon:hover {
+            background-color: rgba(60, 60, 60, 0.5);
+            outline: 1px dotted #666;
+        }
+        
+        .icon:active {
+            background-color: rgba(40, 40, 40, 0.7);
+        }
+        
+        .icon img {
+            width: 48px;
+            height: 48px;
+            margin-bottom: 5px;
+            filter: grayscale(30%) brightness(0.8);
+        }
+        
+        .icon span {
+            font-size: 12px;
+            color: #ddd;
+            text-shadow: 1px 1px 1px #000;
+            word-break: break-word;
+        }
+
+        .window {
+            position: absolute;
+            border: 1px solid #333;
+            background-color: #222;
+            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+            min-width: 300px;
+            min-height: 200px;
+            display: none;
+            flex-direction: column;
+            z-index: 100;
+            left: 50px;
+            top: 50px;
+        }
+        
+        .window.active {
+            display: flex;
+            z-index: 200;
+        }
+        
+        .window-header {
+            background: linear-gradient(to bottom, #444, #222);
+            color: #ddd;
+            padding: 5px 8px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #000;
+            user-select: none;
+            cursor: move;
+        }
+        
+        .window-title {
+            display: flex;
+            align-items: center;
+        }
+        
+        .window-title img {
+            width: 16px;
+            height: 16px;
+            margin-right: 5px;
+            filter: grayscale(30%) brightness(0.8);
+        }
+        
+        .window-controls {
+            display: flex;
+        }
+        
+        .window-btn {
+            width: 16px;
+            height: 14px;
+            margin-left: 3px;
+            background-color: #444;
+            border: 1px solid #000;
+            color: #ddd;
+            font-size: 10px;
+            line-height: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .window-btn:hover {
+            background-color: #555;
+        }
+        
+        .window-btn.close:hover {
+            background-color: #c00;
+            color: #fff;
+        }
+        
+        .window-content {
+            flex-grow: 1;
+            padding: 5px;
+            overflow: auto;
+            background-color: #111;
+            color: #ddd;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .notepad-content {
+            flex-grow: 1;
+            background-color: #111;
+            color: #ddd;
+            border: none;
+            resize: none;
+            font-family: 'Courier New', monospace;
+            padding: 5px;
+            outline: none;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+        }
+        
+
+        
+        .static {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(0,0,0,0.15),
+                rgba(0,0,0,0.15) 1px,
+                transparent 1px,
+                transparent 2px
+            );
+            pointer-events: none;
+            z-index: 1002;
+            opacity: 0.1;
+            animation: static 0.1s infinite;
+        }
+        
+        @keyframes static {
+            0% { transform: translate(0px, 0px); }
+            20% { transform: translate(-1px, 1px); }
+            40% { transform: translate(1px, -1px); }
+            60% { transform: translate(-1px, -1px); }
+            80% { transform: translate(1px, 1px); }
+            100% { transform: translate(0px, 0px); }
+        }
+
+
+
+
+.playlist-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #ddd;
+    text-align: center;
+    margin: 10px 0 -5px 0;
+    letter-spacing: 0.5px;
+    text-transform: lowercase;
+    opacity: 0.85;
+    font-family: 'Segoe UI', sans-serif;
+}
+
+    </style>
+
+
+
+
+
+
+
+
+
+    <style>
+.crt-cursor {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    background-repeat: no-repeat;
+    background-size: contain;
+    animation: cursorFlicker 0.1s infinite alternate;
+    image-rendering: pixelated;
+    left: 0;
+    top: 0;
+}
+
+.crt-cursor.default {
+    width: 24px;
+    height: 24px;
+    background-image: url('./files/cursor/default.png');
+}
+
+.crt-cursor.pointer {
+    width: 24px;
+    height: 24px;
+    background-image: url('./files/cursor/pointer.png');
+}
+
+.crt-cursor.text {
+    width: 24px;
+    height: 24px;
+    background-image: url('./files/cursor/text.png');
+    animation: cursorBlink 1.2s step-end infinite, cursorFlicker 0.1s infinite alternate;
+}
+
+.crt-cursor.drag {
+    width: 24px;
+    height: 24px;
+    background-image: url('./files/cursor/drag.png');
+}
+
+@keyframes cursorFlicker {
+    0%, 100% { opacity: 0.95; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes cursorBlink {
+    0%, 60% { opacity: 1; }
+    61%, 100% { opacity: 0.3; }
+}
+
+html, body, * {
+    cursor: none !important;
+}
+
+    </style>
+</head>
+<body>
+    <div class="static"></div>
+    <div class="crt-cursor" id="crt-cursor"></div>
+    <div class="login-screen" id="login-screen">
+        <div class="login-box">
+            <img src="pfp.jpg" alt="Profile" class="profile-pic">
+            <div class="welcome-text">Welcome gekkefries</div>
+            <input type="password" class="password-input" placeholder="Enter password" id="password-input">
+            <button class="submit-btn" id="login-btn">Sign in</button>
+            <div class="loading-dots" id="loading-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="desktop" id="desktop">
+        <div class="icon" onclick="openWindow('notepad')">
+            <img src="notepad.png" alt="Notepad">
+            <span>readme.txt</span>
+        </div>
+        <div class="icon" onclick="openWindow('spotify')">
+            <img src="spotify.png" alt="Spotify">
+            <span>Spotify.exe</span>
+        </div>
+
+
+
+
+<div class="icon" onclick="openWindow('discord')">
+    <img src="discord.png" alt="Discord">
+    <span>Discord.exe</span>
+</div>
+
+
+<div class="icon" onclick="openWindow('dontrun')">
+    <img src="error.png" alt="Don't Run">
+    <span>DontRun.exe</span>
+</div>
+
+<div class="icon" onclick="openWindow('photos')">
+    <img src="folder.png" alt="Photos">
+    <span>Photos</span>
+</div>
+
+
+    </div>
+
+
+
+    
+    <div class="window" id="notepad-window">
+        <div class="window-header">
+            <div class="window-title">
+                <img src="notepad.png" alt="Notepad">
+                <span>readme.txt - Notepad</span>
+            </div>
+            <div class="window-controls">
+                <div class="window-btn minimize">_</div>
+                <div class="window-btn maximize">□</div>
+                <div class="window-btn close" onclick="closeWindow('notepad')">X</div>
+            </div>
+        </div>
+        <div class="window-content">
+            <textarea class="notepad-content" spellcheck="false">gekkefries was here</textarea>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+
+#spotify-window {
+    width: 500px;
+    height: 420px;
+    background-color: #1a1a1a;
+    border: 1px solid #333;
+}
+
+#spotify-window .window-header {
+    background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+    border-bottom: 1px solid #000;
+}
+
+#spotify-window .window-content {
+    background-color: #111;
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.playlist-title {
+    font-size: 14px;
+    color: #ddd;
+    padding: 8px 12px;
+    background-color: #222;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-left: 3px solid #ff3366;
+}
+
+#song-list {
+    flex: 1;
+    overflow-y: auto;
+    margin-bottom: 10px;
+    scrollbar-width: thin;
+    scrollbar-color: #444 #222;
+}
+
+#song-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+#song-list::-webkit-scrollbar-track {
+    background: #222;
+}
+
+#song-list::-webkit-scrollbar-thumb {
+    background-color: #444;
+    border-radius: 3px;
+}
+
+.song-item {
+    display: flex;
+    align-items: center;
+    padding: 10px 12px;
+    margin-bottom: 4px;
+    background-color: #1a1a1a;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+
+.song-item:hover {
+    background-color: #252525;
+}
+
+.song-item.active {
+    background-color: #333;
+    border-left: 3px solid #ff3366;
+}
+
+.song-number {
+    color: #777;
+    width: 24px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.song-info {
+    flex: 1;
+    margin-left: 10px;
+}
+
+.song-title {
+    color: #ddd;
+    font-size: 13px;
+    margin-bottom: 2px;
+}
+
+.song-artist {
+    color: #999;
+    font-size: 11px;
+}
+
+.song-duration {
+    color: #777;
+    font-size: 11px;
+    margin-left: 10px;
+}
+
+.play-btn {
+    width: 24px;
+    height: 24px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.play-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    transform: scale(1.05);
+}
+
+.play-btn svg {
+    width: 12px;
+    height: 12px;
+}
+
+.player-controls {
+    background-color: #222;
+    padding: 12px;
+    border-radius: 6px;
+}
+
+.now-playing {
+    color: #ddd;
+    font-size: 12px;
+    margin-bottom: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.progress-container {
+    width: 100%;
+    height: 4px;
+    background-color: #333;
+    margin-bottom: 12px;
+    border-radius: 2px;
+    cursor: pointer;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right, #ff3366, #ff6b6b);
+    border-radius: 2px;
+    width: 0%;
+    transition: width 0.1s linear;
+}
+
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.control-btn {
+    width: 32px;
+    height: 32px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    margin: 0 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.control-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.control-btn.play-pause {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(255, 51, 102, 0.7);
+}
+
+.control-btn.play-pause:hover {
+    background-color: rgba(255, 51, 102, 0.9);
+}
+
+.volume-control {
+    display: flex;
+    align-items: center;
+}
+
+.volume-icon {
+    margin-right: 10px;
+}
+
+.volume-icon svg {
+    width: 16px;
+    height: 16px;
+}
+
+.volume-slider {
+    flex: 1;
+    -webkit-appearance: none;
+    height: 4px;
+    background: #333;
+    border-radius: 2px;
+    outline: none;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: #ddd;
+    cursor: pointer;
+    border-radius: 50%;
+}
+@keyframes pulse-glow {
+    0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); }
+    70% { box-shadow: 0 0 0 4px rgba(255, 51, 102, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
+}
+
+.song-item.active .play-btn {
+    animation: pulse-glow 2s infinite;
+    background-color: #ff3366;
+}
+    </style>
+
+
+
+
+
+<div class="window" id="spotify-window" style="width: 500px; height: 420px;">
+    <div class="window-header">
+        <div class="window-title">
+            <img src="spotify.png" alt="Spotify">
+            <span>Spotify.exe</span>
+        </div>
+        <div class="window-controls">
+            <div class="window-btn minimize">_</div>
+            <div class="window-btn maximize">□</div>
+            <div class="window-btn close" onclick="closeWindow('spotify')">X</div>
+        </div>
+    </div>
+    <div class="window-content">
+        <div class="spotify-player" style="display: flex; flex-direction: column; height: 100%;">
+            <div class="playlist-title" style="margin-bottom: 6px;">playlist: gekkefries's favs</div>
+            <div id="song-list" style="flex: 1; overflow-y: auto; margin-bottom: 8px;">
+            </div>
+            <div class="player-controls">
+                <div class="now-playing" id="now-playing">No song selected</div>
+                <div class="progress-container">
+                    <div class="progress-bar" id="progress-bar"></div>
+                </div>
+                <div class="control-buttons">
+                    <div class="control-btn" onclick="skipBackward()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#ddd">
+                            <path d="M6 6h2v12H6zm3.5 6l8.5 6V6z"></path>
+                        </svg>
+                    </div>
+                    <div class="control-btn play-pause" onclick="togglePlay()" id="play-pause-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#ddd" id="play-pause-icon">
+                            <path d="M8 5v14l11-7z"></path>
+                        </svg>
+                    </div>
+                    <div class="control-btn" onclick="skipForward()">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="#ddd">
+                            <path d="M6 18l8.5-6L6 6v12zM16 6v12h2V6h-2z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="volume-control">
+                    <div class="volume-icon">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="#ddd">
+                            <path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"></path>
+                        </svg>
+                    </div>
+                    <input type="range" min="0" max="1" step="0.01" value="0.7" class="volume-slider" id="volume-slider">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let audioPlayer = new Audio();
+let currentSongIndex = -1;
+let songs = [];
+let isPlaying = false;
+let isDraggingProgress = false;
+
+function loadSongs() {
+    songs = [
+        { 
+            title: "Harvey", 
+            artist: "Her's", 
+            duration: "3:31", 
+            path: "./files/songs/Harvey/audio.mp3" 
+        },
+        { 
+            title: "Smells Like Teen Spirit", 
+            artist: "Nirvana", 
+            duration: "5:01", 
+            path: "./files/songs/Smells Like Teen Spirit/audio.mp3" 
+        }
+    ];
+    
+    const songList = document.getElementById('song-list');
+    songList.innerHTML = '';
+    
+    songs.forEach((song, index) => {
+        const songItem = document.createElement('div');
+        songItem.className = 'song-item';
+        songItem.innerHTML = `
+            <div class="song-number">${index + 1}</div>
+            <div class="song-info">
+                <div class="song-title">${song.title}</div>
+                <div class="song-artist">${song.artist}</div>
+            </div>
+            <div class="song-duration">${song.duration}</div>
+            <div class="play-btn" onclick="playSong(${index})">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="#ddd">
+                    <path d="M8 5v14l11-7z"></path>
+                </svg>
+            </div>
+        `;
+        songList.appendChild(songItem);
+    });
+    
+    audioPlayer.addEventListener('timeupdate', updateProgress);
+    audioPlayer.addEventListener('ended', songEnded);
+    audioPlayer.addEventListener('play', () => {
+        isPlaying = true;
+        updatePlayPauseButton();
+    });
+    audioPlayer.addEventListener('pause', () => {
+        isPlaying = false;
+        updatePlayPauseButton();
+    });
+    
+    document.getElementById('volume-slider').addEventListener('input', function() {
+        audioPlayer.volume = this.value;
+    });
+    audioPlayer.volume = 0.7;
+    
+    const progressContainer = document.querySelector('.progress-container');
+    progressContainer.addEventListener('mousedown', function(e) {
+        isDraggingProgress = true;
+        updateProgressBar(e);
+    });
+    
+    document.addEventListener('mousemove', function(e) {
+        if (isDraggingProgress) {
+            updateProgressBar(e);
+        }
+    });
+    
+    document.addEventListener('mouseup', function() {
+        isDraggingProgress = false;
+    });
+    
+    progressContainer.addEventListener('click', updateProgressBar);
+}
+
+function updateProgressBar(e) {
+    const progressContainer = document.querySelector('.progress-container');
+    const rect = progressContainer.getBoundingClientRect();
+    const pos = (e.clientX - rect.left) / rect.width;
+    const progressBar = document.getElementById('progress-bar');
+    
+    if (isDraggingProgress || e.type === 'click') {
+        if (audioPlayer.duration) {
+            audioPlayer.currentTime = pos * audioPlayer.duration;
+        }
+    }
+    
+    if (audioPlayer.duration) {
+        progressBar.style.width = `${(audioPlayer.currentTime / audioPlayer.duration) * 100}%`;
+    }
+}
+
+function updateProgress() {
+    if (!isDraggingProgress) {
+        const progressBar = document.getElementById('progress-bar');
+        if (audioPlayer.duration) {
+            progressBar.style.width = `${(audioPlayer.currentTime / audioPlayer.duration) * 100}%`;
+        }
+    }
+}
+
+function playSong(index) {
+    if (index >= 0 && index < songs.length) {
+        currentSongIndex = index;
+        const song = songs[index];
+        audioPlayer.src = song.path;
+        audioPlayer.play()
+        
+            .then(() => {
+                document.getElementById('now-playing').textContent = `Now Playing: ${song.title} - ${song.artist}`;
+                updateActiveSong();
+                updateDiscordActivity(song);
+            })
+            .catch(error => {
+                console.error('Error playing song:', error);
+            });
+    }
+}
+
+function updateActiveSong() {
+    const songItems = document.querySelectorAll('.song-item');
+    songItems.forEach((item, index) => {
+        if (index === currentSongIndex) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    });
+}
+
+function togglePlay() {
+    if (currentSongIndex === -1 && songs.length > 0) {
+        playSong(0);
+    } else if (isPlaying) {
+        audioPlayer.pause();
+    } else {
+        audioPlayer.play();
+    }
+}
+
+function updatePlayPauseButton() {
+    const icon = document.getElementById('play-pause-icon');
+    if (isPlaying) {
+        icon.innerHTML = '<path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"></path>';
+    } else {
+        icon.innerHTML = '<path d="M8 5v14l11-7z"></path>';
+    }
+}
+
+function skipForward() {
+    if (songs.length === 0) return;
+    const nextIndex = (currentSongIndex + 1) % songs.length;
+    playSong(nextIndex);
+}
+
+function skipBackward() {
+    if (songs.length === 0) return;
+    const prevIndex = (currentSongIndex - 1 + songs.length) % songs.length;
+    playSong(prevIndex);
+}
+
+function songEnded() {
+    skipForward();
+}
+
+document.getElementById('spotify-window').addEventListener('click', function() {
+    if (songs.length === 0) {
+        loadSongs();
+    }
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="window" id="dontrun-window" style="display: none; width: 320px; height: 180px;">
+  <div class="window-header">
+    <div class="window-title">
+      <img src="error.png" alt="Error">
+      <span>DontRun.exe</span>
+    </div>
+    <div class="window-controls">
+      <div class="window-btn close" onclick="closeWindow('dontrun')">X</div>
+    </div>
+  </div>
+  <div class="window-content" style="padding: 15px; text-align: center;">
+    <p style="margin-bottom: 20px;">Running this may cause system instability.</p>
+    <button onclick="runDontRun()" style="padding: 5px 15px; background: #d3d3d3; border: 1px solid #808080; cursor: pointer;">Continue</button>
+    <button onclick="closeWindow('dontrun')" style="padding: 5px 15px; background: #d3d3d3; border: 1px solid #808080; cursor: pointer; margin-left: 10px;">Cancel</button>
+  </div>
+</div>
+
+<script>
+windows['dontrun'] = false;
+
+function createErrorMessage() {
+  const error = document.createElement('div');
+  error.className = 'win6-error-message';
+  error.innerHTML = `
+    <div class="win6-error-header">
+      <div class="win6-error-icon">!</div>
+      <span class="win6-error-title">System Warning</span>
+    </div>
+    <div class="win6-error-content">
+      <p>you arent supposed to run this</p>
+    </div>
+    <div class="win6-error-footer">
+      <button class="win6-error-btn">OK</button>
+    </div>
+  `;
+  const x = 50 + Math.random() * (window.innerWidth - 400);
+  const y = 50 + Math.random() * (window.innerHeight - 250);
+  Object.assign(error.style, {
+    position: 'fixed',
+    left: `${x}px`,
+    top: `${y}px`,
+    zIndex: 9999
+  });
+  error.querySelector('.win6-error-btn').onclick = () => error.remove();
+  document.body.appendChild(error);
+}
+
+function pixelateScreen() {
+  const canvas = document.createElement('canvas');
+  canvas.id = 'pixel-canvas';
+  Object.assign(canvas.style, {
+    position: 'fixed',
+    top: '0', left: '0',
+    width: '100%', height: '100%',
+    zIndex: 99999
+  });
+  document.body.appendChild(canvas);
+
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width = window.innerWidth;
+  const H = canvas.height = window.innerHeight;
+  const block = 4;
+  const cols = Math.ceil(W / block);
+
+  const progress = new Array(cols).fill(0);
+
+  function drawFrame() {
+    let allDone = true;
+
+    for (let i = 0; i < cols; i++) {
+      if (progress[i] < H) {
+        allDone = false;
+        const x = i * block;
+        const y = progress[i];
+        const shade = Math.floor(Math.random() * 256);
+        ctx.fillStyle = `rgb(${shade},${shade},${shade})`;
+        ctx.fillRect(x, y, block, block);
+
+        progress[i] += block + Math.floor(Math.random() * block);
+      }
+    }
+
+    if (!allDone) {
+      requestAnimationFrame(drawFrame);
+    } else {
+      setTimeout(showRebootMessage, 500);
+    }
+  }
+
+  drawFrame();
+}
+
+
+function showRebootMessage() {
+  const msg = document.createElement('div');
+  Object.assign(msg.style, {
+    position: 'fixed',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 1000000,            // above the canvas
+    color: '#ccc',
+    fontFamily: 'Courier New, monospace',
+    fontSize: '18px',
+    textAlign: 'center'
+  });
+  msg.innerHTML = `
+    <div style="margin-bottom: 10px;">SYSTEM FAILURE</div>
+    <div style="font-size: 14px;">Rebooting in safe mode...</div>
+    <div style="font-size: 12px; margin-top: 20px; color: #888">:: PLEASE WAIT ::</div>
+  `;
+  document.body.appendChild(msg);
+  setTimeout(() => location.reload(), 2500);
+}
+
+function runDontRun() {
+  closeWindow('dontrun');
+  let count = 0,
+      delay = 600,      // start faster, but not instantly
+      max = 200;        // more total messages
+
+  function wave() {
+    const n = 2 + Math.floor(count / 15);  // slowly ramp up per wave
+    for (let i = 0; i < n; i++) {
+      createErrorMessage();
+      if (++count >= max) break;
+    }
+    if (count < max) {
+      delay = Math.max(100, delay * 0.9);  // shrink delay, but not drastically
+      setTimeout(wave, delay);
+    } else {
+      setTimeout(pixelateScreen, 300);
+    }
+  }
+
+  wave();
+}
+
+
+const errorStyle = document.createElement('style');
+errorStyle.textContent = `
+.win6-error-message {
+  width: 300px;
+  background: linear-gradient(to bottom, #d3d3d3, #b0b0b0);
+  border: 1px solid #404040;
+  box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  font-family: 'MS Sans Serif', Arial, sans-serif;
+  font-size: 12px;
+  color: #000;
+}
+.win6-error-header {
+  background: linear-gradient(to right, #000080, #1084d0);
+  color: white;
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  border-bottom: 1px solid #404040;
+}
+.win6-error-icon {
+  width: 20px;
+  height: 20px;
+  background: #ff0;
+  color: #000;
+  border: 1px solid #404040;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 10px;
+  font-weight: bold;
+}
+.win6-error-content {
+  background: #fff;
+  padding: 15px;
+  text-align: center;
+  border-bottom: 1px solid #808080;
+}
+.win6-error-footer {
+  padding: 10px;
+  text-align: center;
+}
+.win6-error-btn {
+  padding: 4px 15px;
+  background: linear-gradient(to bottom, #d3d3d3, #b0b0b0);
+  border: 1px solid #404040;
+  cursor: pointer;
+  min-width: 80px;
+}
+.win6-error-btn:active {
+  background: linear-gradient(to bottom, #b0b0b0, #909090);
+  border-color: #000;
+}
+`;
+document.head.appendChild(errorStyle);
+</script>
+
+
+
+
+
+
+
+<div class="window" id="photos-window" style="display: none; width: 600px; height: 400px;">
+    <div class="window-header">
+        <div class="window-title">
+            <img src="folder.png" alt="Folder">
+            <span>Photos</span>
+        </div>
+        <div class="window-controls">
+            <div class="window-btn minimize">_</div>
+            <div class="window-btn maximize">□</div>
+            <div class="window-btn close" onclick="closeWindow('photos')">X</div>
+        </div>
+    </div>
+    <div class="window-content" style="overflow: auto; padding: 10px;">
+        <div class="folder-view" id="photos-folder-view" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 15px;">
+        </div>
+    </div>
+</div>
+
+<div class="window" id="photos-window" style="display: none; width: 640px; height: 480px;">
+    <div class="window-header">
+        <div class="window-title">
+            <img src="folder.png" alt="Folder">
+            <span>Photos</span>
+        </div>
+        <div class="window-controls">
+            <div class="window-btn minimize">_</div>
+            <div class="window-btn maximize">□</div>
+            <div class="window-btn close" onclick="closeWindow('photos')">X</div>
+        </div>
+    </div>
+    <div class="window-content" style="display: flex; flex-direction: column; height: calc(100% - 30px);">
+        <div class="folder-toolbar" style="background: #d4d0c8; border-bottom: 1px solid #808080; padding: 4px; display: flex;">
+            <button class="folder-toolbar-btn" style="margin-right: 8px;">File</button>
+            <button class="folder-toolbar-btn" style="margin-right: 8px;">Edit</button>
+            <button class="folder-toolbar-btn" style="margin-right: 8px;">View</button>
+            <button class="folder-toolbar-btn">Help</button>
+        </div>
+        
+        <div class="folder-statusbar" style="background: #d4d0c8; border-top: 1px solid white; padding: 4px; font-size: 12px;">
+            <span id="folder-status">1 object</span>
+        </div>
+        
+        <div class="folder-view" id="photos-folder-view" style="flex: 1; overflow: auto; background: #d4d0c8; padding: 8px; display: grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap: 8px;">
+        </div>
+    </div>
+</div>
+
+<div class="window" id="image-viewer-window" style="display: none; width: 500px; height: 500px;">
+    <div class="window-header">
+        <div class="window-title">
+            <img src="image.png" alt="Image">
+            <span id="image-viewer-title">Image Viewer</span>
+        </div>
+        <div class="window-controls">
+            <div class="window-btn minimize">_</div>
+            <div class="window-btn maximize">□</div>
+            <div class="window-btn close" onclick="closeWindow('image-viewer')">X</div>
+        </div>
+    </div>
+    <div class="window-content" style="display: flex; justify-content: center; align-items: center; overflow: hidden; background: #222;">
+        <img id="image-viewer-img" style="max-width: 100%; max-height: 100%; object-fit: contain; display: none;">
+<video id="image-viewer-video" controls style="max-width: 100%; max-height: 100%; display: none;"></video>
+
+    </div>
+</div>
+
+<script>
+const appWindows = {};
+appWindows['photos'] = false;
+appWindows['image-viewer'] = false;
+
+const photos = [
+    { name: "james1.jpg", path: "./files/images/james1.jpg" },
+    { name: "mogger.png", path: "./files/images/mogger.png" },
+    { name: "berlin.png", path: "./files/images/berlin.png" },
+    { name: "cutie.mp4", path: "./files/images/cutie.mp4" }
+];
+
+function loadPhotos() {
+    const folderView = document.getElementById('photos-folder-view');
+    folderView.innerHTML = '';
+    
+    photos.forEach((photo, index) => {
+        const photoItem = document.createElement('div');
+        photoItem.className = 'folder-item';
+        photoItem.innerHTML = `
+            <div class="folder-item-icon" onclick="openImageViewer(${index})">
+                <img src="${photo.path}" alt="${photo.name}" onerror="this.src='./files/images/missing.jpg'">
+            </div>
+            <div class="folder-item-name">${photo.name}</div>
+        `;
+        folderView.appendChild(photoItem);
+    });
+    
+    document.getElementById('folder-status').textContent = `${photos.length} object${photos.length !== 1 ? 's' : ''}`;
+}
+
+function openImageViewer(index) {
+    const photo = photos[index];
+    const viewer = document.getElementById('image-viewer-window');
+    const imgElement = document.getElementById('image-viewer-img');
+    const videoElement = document.getElementById('image-viewer-video');
+    const extension = photo.name.split('.').pop().toLowerCase();
+
+    imgElement.style.display = 'none';
+    videoElement.style.display = 'none';
+
+    if (extension === 'mp4') {
+        videoElement.src = photo.path;
+        videoElement.style.display = 'block';
+        videoElement.load();
+    } else {
+        imgElement.src = photo.path;
+        imgElement.style.display = 'block';
+    }
+
+    document.getElementById('image-viewer-title').textContent = photo.name;
+
+    const photosWindow = document.getElementById('photos-window');
+    const photosRect = photosWindow.getBoundingClientRect();
+    viewer.style.left = (photosRect.left + 50) + 'px';
+    viewer.style.top = (photosRect.top + 50) + 'px';
+    viewer.style.display = 'flex';
+    viewer.style.zIndex = ++zIndex;
+    windows['image-viewer'] = true;
+
+    const taskbar = document.getElementById('taskbar-items');
+    if (!document.querySelector('.taskbar-item[onclick="toggleWindow(\'image-viewer\')"]')) {
+        const taskbarItem = document.createElement('div');
+        taskbarItem.className = 'taskbar-item';
+        taskbarItem.onclick = function () { toggleWindow('image-viewer'); };
+        taskbarItem.innerHTML = `
+            <img src="image.png">
+            ${photo.name}
+        `;
+        taskbar.appendChild(taskbarItem);
+    }
+}
+
+
+document.getElementById('photos-window').addEventListener('click', function() {
+    if (document.getElementById('photos-folder-view').children.length === 0) {
+        loadPhotos();
+    }
+});
+
+const folderStyle = document.createElement('style');
+folderStyle.textContent = `
+.folder-toolbar-btn {
+    background: #d4d0c8;
+    border: 1px solid transparent;
+    padding: 3px 12px;
+    font-family: 'MS Sans Serif', sans-serif;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.folder-toolbar-btn:hover {
+    background: linear-gradient(to bottom, #f0f0f0, #d4d0c8);
+    border: 1px solid #808080;
+}
+
+.folder-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+    border-radius: 3px;
+    background: #d4d0c8;
+    border: 1px solid transparent;
+}
+
+.folder-item:hover {
+    background: linear-gradient(to bottom, #f0f0f0, #d4d0c8);
+    border: 1px solid #808080;
+}
+
+.folder-item:active {
+    background: linear-gradient(to bottom, #d4d0c8, #f0f0f0);
+}
+
+.folder-item-icon {
+    width: 80px;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+    overflow: hidden;
+    background-color: white;
+    border: 1px solid #808080;
+    box-shadow: inset 1px 1px 0px #fff;
+}
+
+.folder-item-icon img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.folder-item-name {
+    font-size: 12px;
+    color: black;
+    text-align: center;
+    word-break: break-all;
+    max-width: 100%;
+    font-family: 'MS Sans Serif', sans-serif;
+    text-shadow: 1px 1px 0px white;
+}
+
+
+.folder-view::-webkit-scrollbar {
+    width: 16px;
+    height: 16px;
+}
+
+.folder-view::-webkit-scrollbar-track {
+    background: #d4d0c8;
+    border-left: 1px solid #808080;
+    border-top: 1px solid #808080;
+    border-right: 1px solid white;
+    border-bottom: 1px solid white;
+}
+
+.folder-view::-webkit-scrollbar-thumb {
+    background: #d4d0c8;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+    border-right: 1px solid #808080;
+    border-bottom: 1px solid #808080;
+}
+
+.folder-view::-webkit-scrollbar-thumb:hover {
+    background: #c0c0c0;
+}
+`;
+document.head.appendChild(folderStyle);
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<style>
+
+.taskbar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 40px;
+    background: rgba(30, 30, 30, 0.9);
+    backdrop-filter: blur(5px);
+    border-top: 1px solid #000;
+    display: flex;
+    align-items: center;
+    padding: 0 10px;
+    z-index: 1000;
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
+    display: none; 
+}
+
+.taskbar-items {
+    display: flex;
+    height: 100%;
+    gap: 6px;
+}
+
+.taskbar-item {
+    height: 32px;
+    padding: 0 15px;
+    background: rgba(50, 50, 50, 0.7);
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    color: #ddd;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+.taskbar-item:hover {
+    background: rgba(70, 70, 70, 0.8);
+}
+
+.taskbar-item.active {
+    background: rgba(80, 80, 80, 0.9);
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    border-color: rgba(0,0,0,0.5);
+}
+
+.taskbar-item img {
+    width: 16px;
+    height: 16px;
+    margin-right: 8px;
+    filter: grayscale(30%) brightness(0.9);
+}
+
+.taskbar-item.active img {
+    filter: grayscale(0%) brightness(1.1);
+}
+
+.clock {
+    margin-left: auto;
+    padding: 0 15px;
+    font-size: 12px;
+    color: #ddd;
+    background: rgba(40, 40, 40, 0.7);
+    height: 32px;
+    display: flex;
+    align-items: center;
+    border-radius: 4px;
+    border: 1px solid rgba(0,0,0,0.3);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+}
+
+
+@keyframes taskbarPulse {
+    0% { opacity: 0.8; }
+    50% { opacity: 1; }
+    100% { opacity: 0.8; }
+}
+
+.taskbar-item:not(.active):hover {
+    animation: taskbarPulse 1.5s infinite;
+}
+
+
+.helpy-container {
+    position: fixed;
+    bottom: 45px; 
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999; 
+    pointer-events: none; 
+}
+
+.helpy-gif {
+    width: 320px;
+    height: auto;
+    animation: floaty 3s ease-in-out infinite;
+}
+</style>
+
+
+<div class="helpy-container">
+  <img src="helpy.gif" alt="Helpy" class="helpy-gif">
+</div>
+
+    
+    <div class="taskbar" id="taskbar">
+        <div class="taskbar-items">
+            <div class="taskbar-item" onclick="toggleWindow('notepad')">
+                <img src="notepad.png">
+                readme.txt
+            </div>
+            <div class="taskbar-item" onclick="toggleWindow('spotify')">
+                <img src="spotify.png">
+                Spotify.exe
+            </div>
+
+            <div class="taskbar-item" onclick="toggleWindow('discord')">
+                <img src="discord.png">
+                Discord.exe
+            </div>
+
+            <div class="taskbar-item" onclick="toggleWindow('dontrun')">
+                <img src="error.png">
+                DontRun.exe
+            </div>
+
+            <div class="taskbar-item" onclick="toggleWindow('photos')">
+                <img src="folder.png">
+                Photos
+            </div>
+
+        </div>
+        <div class="clock" id="clock">12:00 AM</div>
+    </div>
+    
+    <script>
+        let activeWindow = null;
+        let windows = {};
+        let zIndex = 100;
+        
+function openWindow(id) {
+    if (id === 'dontrun') {
+        runDontRun();
+        return;
+    }
+    
+    const window = document.getElementById(id + '-window');
+    if (window) {
+        if (windows[id]) {
+            toggleWindow(id);
+        } else {
+            window.style.display = 'flex';
+            window.classList.add('active');
+            window.style.zIndex = ++zIndex;
+            windows[id] = true;
+            activeWindow = id;
+            
+            const taskbarItem = document.querySelector(`.taskbar-item[onclick="toggleWindow('${id}')"]`);
+            if (taskbarItem) {
+                taskbarItem.classList.add('active');
+            }
+        }
+    }
+}
+        
+        function closeWindow(id) {
+            const window = document.getElementById(id + '-window');
+            if (window) {
+                window.style.display = 'none';
+                window.classList.remove('active');
+                windows[id] = false;
+                
+                const taskbarItem = document.querySelector(`.taskbar-item[onclick="toggleWindow('${id}')"]`);
+                if (taskbarItem) {
+                    taskbarItem.classList.remove('active');
+                }
+                
+                if (activeWindow === id) {
+                    activeWindow = null;
+                }
+            }
+        }
+        
+        function toggleWindow(id) {
+            const window = document.getElementById(id + '-window');
+            if (window) {
+                if (window.style.display === 'none' || !window.classList.contains('active')) {
+                    openWindow(id);
+                } else {
+                    closeWindow(id);
+                }
+            }
+        }
+        
+        document.querySelectorAll('.window-header').forEach(header => {
+            header.addEventListener('mousedown', function(e) {
+                const window = this.parentElement;
+                window.style.zIndex = ++zIndex;
+                
+                let offsetX = e.clientX - window.getBoundingClientRect().left;
+                let offsetY = e.clientY - window.getBoundingClientRect().top;
+                
+                function moveWindow(e) {
+                    window.style.left = (e.clientX - offsetX) + 'px';
+                    window.style.top = (e.clientY - offsetY) + 'px';
+                }
+                
+                document.addEventListener('mousemove', moveWindow);
+                
+                document.addEventListener('mouseup', function() {
+                    document.removeEventListener('mousemove', moveWindow);
+                }, { once: true });
+            });
+        });
+        
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            document.getElementById('clock').textContent = `${hours}:${minutes} ${ampm}`;
+        }
+        
+        setInterval(updateClock, 1000);
+        updateClock();
+        
+        windows['notepad'] = false;
+        windows['spotify'] = false;
+        
+        document.querySelector('.notepad-content').addEventListener('keydown', function(e) {
+            if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+                e.preventDefault();
+            }
+        });
+        
+        document.getElementById('login-btn').addEventListener('click', function() {
+            const passwordInput = document.getElementById('password-input');
+            const loadingDots = document.getElementById('loading-dots');
+            
+            passwordInput.style.display = 'none';
+            this.style.display = 'none';
+            loadingDots.style.display = 'block';
+            
+            setTimeout(function() {
+                document.getElementById('login-screen').style.display = 'none';
+                document.getElementById('desktop').style.display = 'grid';
+                document.getElementById('taskbar').style.display = 'flex';
+                loadSongs();
+            }, 1500);
+        });
+        
+        document.getElementById('password-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                document.getElementById('login-btn').click();
+            }
+        });
+        
+
+    </script>
+
+
+
+
+
+
+
+<div class="window draggable" id="discord-window" style="width: 400px; height: 600px;">
+    <div class="window-header">
+        <div class="window-title">
+            <img src="discord.png" alt="Discord">
+            <span>Discord.exe</span>
+        </div>
+        <div class="window-controls">
+            <div class="window-btn minimize">_</div>
+            <div class="window-btn maximize">□</div>
+            <div class="window-btn close" onclick="closeWindow('discord')">X</div>
+        </div>
+    </div>
+    <div class="window-content">
+        <div class="discord-profile">
+            <div class="profile-header">
+                <img src="./files/discord/pfp.png" class="profile-picture">
+                <div class="profile-badge">ONLINE</div>
+            </div>
+            <div class="profile-username">.gekkefries1</div>
+            <div class="profile-discriminator">#0000</div>
+            
+            <div class="profile-divider"></div>
+            
+            <div class="profile-section">
+                <h3>ABOUT ME</h3>
+                <p>I love challenging projects and Vr/flat screen games</p>
+            </div>
+            
+            <div class="profile-section">
+                <h3>ACTIVITY</h3>
+                <div class="activity">
+                    <img src="spotify.png" class="activity-icon">
+                    <div class="activity-text">
+                        <div class="activity-name">Listening to Spotify</div>
+                        <div class="activity-details">N**gga N**gga N**gga - Gangsta Rap</div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="add-me-btn" onclick="addMeOnDiscord()">Add me</button>
+        </div>
+    </div>
+</div>
+
+<style>
+
+#discord-window {
+    background-color: #36393f;
+    border-color: #202225;
+}
+
+#discord-window .window-header {
+    background: linear-gradient(to bottom, #4f545c, #36393f);
+    border-bottom-color: #202225;
+}
+
+#discord-window .window-content {
+    background-color: #36393f;
+    padding: 15px;
+    color: #dcddde;
+    overflow: hidden; 
+    height: calc(100% - 40px); 
+}
+
+.discord-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100% - 30px);
+    box-sizing: border-box;
+}
+
+.profile-header {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.profile-picture {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 5px solid #202225;
+    object-fit: cover;
+}
+
+.profile-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 5px;
+    background-color: #3ba55c;
+    color: white;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: bold;
+}
+
+.profile-username {
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+
+.profile-discriminator {
+    color: #b9bbbe;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.profile-divider {
+    width: 100%;
+    height: 1px;
+    background-color: #202225;
+    margin: 15px 0;
+}
+
+.profile-section {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.profile-section h3 {
+    color: #b9bbbe;
+    font-size: 12px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.profile-section p {
+    margin: 5px 0;
+    font-size: 14px;
+}
+
+.activity {
+    display: flex;
+    align-items: center;
+    background-color: #2f3136;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+.activity-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+
+.activity-text {
+    flex: 1;
+}
+
+.activity-name {
+    font-size: 14px;
+    color: white;
+}
+
+.activity-details {
+    font-size: 12px;
+    color: #b9bbbe;
+}
+
+.add-me-btn {
+    margin-top: auto;
+    width: 100%;
+    padding: 12px;
+    background-color: #5865f2;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.add-me-btn:hover {
+    background-color: #4752c4;
+}
+
+.add-me-btn:active {
+    background-color: #3a45a5;
+}
+</style>
+
+<script>
+function addMeOnDiscord() {
+    window.open('https://discordapp.com/users/1147540007171670077', '_blank');
+}
+
+windows['discord'] = false;
+
+function updateDiscordActivity(song) {
+    const activityDetails = document.querySelector('.activity-details');
+    if (activityDetails && song) {
+        activityDetails.textContent = `${song.title} - ${song.artist}`;
+    }
+}
+
+
+document.querySelectorAll('.draggable').forEach(windowElement => {
+    const header = windowElement.querySelector('.window-header');
+    header.addEventListener('mousedown', function(e) {
+        if (e.target.classList.contains('window-btn')) return;
+        
+        const offsetX = e.clientX - windowElement.getBoundingClientRect().left;
+        const offsetY = e.clientY - windowElement.getBoundingClientRect().top;
+        
+        function moveWindow(e) {
+            windowElement.style.left = (e.clientX - offsetX) + 'px';
+            windowElement.style.top = (e.clientY - offsetY) + 'px';
+        }
+        
+        function stopMoving() {
+            document.removeEventListener('mousemove', moveWindow);
+            document.removeEventListener('mouseup', stopMoving);
+        }
+        
+        document.addEventListener('mousemove', moveWindow);
+        document.addEventListener('mouseup', stopMoving);
+    });
+});
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+const cursor = document.getElementById('crt-cursor');
+let currentCursorType = 'default';
+
+cursor.className = 'crt-cursor default';
+
+const xOffset = 0; // Horizontal adjustment (positive = right, negative = left)
+const yOffset = 0; // Vertical adjustment (positive = down, negative = up)
+
+document.addEventListener('mousemove', function(e) {
+    cursor.style.left = (e.clientX + xOffset) + 'px';
+    cursor.style.top = (e.clientY + yOffset) + 'px';
+});
+
+document.addEventListener('wheel', function() {
+    cursor.style.opacity = '1';
+});
+
+function updateCursorType(newType) {
+    cursor.className = `crt-cursor ${newType}`;
+    currentCursorType = newType;
+}
+
+document.querySelectorAll('a, button, .window-btn, .control-btn, .play-btn, .icon, [onclick]').forEach(el => {
+    el.addEventListener('mouseenter', () => updateCursorType('pointer'));
+    el.addEventListener('mouseleave', () => updateCursorType('default'));
+});
+
+document.querySelectorAll('input, textarea, [contenteditable]').forEach(el => {
+    el.addEventListener('mouseenter', () => updateCursorType('text'));
+    el.addEventListener('mouseleave', () => updateCursorType('default'));
+    el.addEventListener('focus', () => updateCursorType('text'));
+    el.addEventListener('blur', () => updateCursorType('default'));
+});
+
+document.querySelectorAll('.window-header').forEach(el => {
+    el.addEventListener('mouseenter', () => updateCursorType('drag'));
+    el.addEventListener('mouseleave', () => updateCursorType('default'));
+});
+
+cursor.style.opacity = '1';
+    </script>
+</body>
+</html>

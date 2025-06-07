@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Dark Presence</title>
+    <style>
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Times New Roman', Times, serif;
+            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'><circle cx='8' cy='8' r='7' fill='none' stroke='white' stroke-width='1'/><circle cx='8' cy='8' r='1' fill='white'/></svg>"), auto;
+        }
+
+        body {
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            padding: 2rem;
+            transition: all 0.8s ease;
+        }
+
+        /* Blur Overlay */
+        #blur-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            backdrop-filter: blur(15px);
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: all 1.2s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        #blur-overlay h2 {
+            color: #fff;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073;
+            animation: pulse 2s infinite alternate;
+            cursor: pointer;
+        }
+
+        @keyframes pulse {
+            from {
+                opacity: 0.7;
+                text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #e60073;
+            }
+            to {
+                opacity: 1;
+                text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073;
+            }
+        }
+
+        /* Banner */
+        .banner {
+            width: 100%;
+            height: 300px;
+            background-image: url('banner.png');
+            background-size: cover;
+            background-position: center;
+            border: 1px solid #333;
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+            position: relative;
+            margin-bottom: 2rem;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%);
+            z-index: 1;
+        }
+
+        .banner::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(0deg, #0a0a0a 0%, rgba(10,10,10,0) 100%);
+            z-index: 2;
+        }
+
+        /* Content */
+        .content {
+            display: flex;
+            width: 100%;
+            height: calc(100% - 350px);
+            gap: 2rem;
+        }
+
+        .left-panel, .right-panel {
+            flex: 1;
+            border: 1px solid #333;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+            background: rgba(15, 15, 15, 0.5);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .left-panel::before, .right-panel::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.02) 100%);
+            z-index: -1;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            position: relative;
+            display: inline-block;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #fff, transparent);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+            border-bottom: 1px solid #333;
+            padding-bottom: 0.5rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            line-height: 1.6;
+            color: #aaa;
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            position: relative;
+            transition: all 0.3s;
+        }
+
+        a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #fff;
+            transition: width 0.3s;
+        }
+
+        a:hover::after {
+            width: 100%;
+        }
+
+        /* List Styles */
+        ul {
+            list-style-type: none;
+            margin-bottom: 1.5rem;
+        }
+
+        li {
+            padding: 0.5rem 0;
+            position: relative;
+            padding-left: 1.5rem;
+            color: #aaa;
+        }
+
+        li::before {
+            content: '✝';
+            position: absolute;
+            left: 0;
+            color: #fff;
+        }
+
+        /* Footer */
+        footer {
+            width: 100%;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.8rem;
+            color: #555;
+            border-top: 1px solid #222;
+            margin-top: 2rem;
+        }
+
+        /* Decorative Elements */
+        .corner {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-style: solid;
+            border-color: #fff;
+            border-width: 0;
+            opacity: 0.3;
+        }
+
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-top-width: 1px;
+            border-left-width: 1px;
+        }
+
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+            border-top-width: 1px;
+            border-right-width: 1px;
+        }
+
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+            border-bottom-width: 1px;
+            border-left-width: 1px;
+        }
+
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-bottom-width: 1px;
+            border-right-width: 1px;
+        }
+
+        /* Animation */
+        @keyframes flicker {
+            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+                opacity: 0.99;
+            }
+            20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+                opacity: 0.4;
+            }
+        }
+
+        .flicker {
+            animation: flicker 3s linear infinite;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="blur-overlay">
+        <h2>click anywhere to continue</h2>
+    </div>
+
+    <div class="banner">
+        <div class="corner corner-tl"></div>
+        <div class="corner corner-tr"></div>
+        <div class="corner corner-bl"></div>
+        <div class="corner corner-br"></div>
+    </div>
+
+    <div class="content">
+        <div class="left-panel">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+            
+            <h1>Gekkefries</h1>
+            <p class="flicker">Dark Artist | Occult Enthusiast | Night Wanderer</p>
+            
+            <h2>About Me</h2>
+            <p>I am a creature of the night, weaving shadows into art and words into spells. My existence is a tapestry of moonlight and melancholy, a symphony of silence and screams.</p>
+            
+            <h2>Interests</h2>
+            <ul>
+                <li>Gothic literature and poetry</li>
+                <li>Macabre art and photography</li>
+                <li>Occult studies and esotericism</li>
+                <li>Nocturnal explorations</li>
+                <li>Funerary customs and traditions</li>
+            </ul>
+        </div>
+        
+        <div class="right-panel">
+            <div class="corner corner-tl"></div>
+            <div class="corner corner-tr"></div>
+            <div class="corner corner-bl"></div>
+            <div class="corner corner-br"></div>
+            
+            <h2>My Works</h2>
+            <ul>
+                <li>"Shadows of the Forgotten" - Art Collection</li>
+                <li>"Whispers in the Crypt" - Poetry Anthology</li>
+                <li>"Nocturne" - Photography Series</li>
+                <li>"The Blackened Veil" - Short Stories</li>
+            </ul>
+            
+            <h2>Contact</h2>
+            <p>If you dare to reach into the darkness, you may find me there.</p>
+            <ul>
+                <li>Email: <a href="mailto:shadow@void.com">shadow@void.com</a></li>
+                <li>Instagram: <a href="https://instagram.com/yourdarkpresence" target="_blank">@yourdarkpresence</a></li>
+                <li>Twitter: <a href="https://twitter.com/eternalnight" target="_blank">@eternalnight</a></li>
+            </ul>
+        </div>
+    </div>
+    
+    <footer>
+        &copy; <span id="year"></span> All rights reserved. No light may penetrate this darkness.
+    </footer>
+
+    <script>
+        // Remove blur overlay on click
+        document.getElementById('blur-overlay').addEventListener('click', function() {
+            this.style.opacity = '0';
+            this.style.pointerEvents = 'none';
+            setTimeout(() => {
+                this.style.display = 'none';
+            }, 1200);
+        });
+
+        // Set current year in footer
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Add some random flickering to panels for effect
+        setInterval(() => {
+            const panels = document.querySelectorAll('.left-panel, .right-panel');
+            panels.forEach(panel => {
+                if(Math.random() > 0.9) {
+                    panel.style.boxShadow = '0 0 30px rgba(255, 0, 0, 0.3)';
+                    setTimeout(() => {
+                        panel.style.boxShadow = '0 0 20px rgba(0, 0, 0, 0.3)';
+                    }, 200);
+                }
+            });
+        }, 3000);
+    </script>
+</body>
+</html>
