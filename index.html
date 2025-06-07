@@ -4,421 +4,455 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>gekkefries's pc</title>
-    <style>
+<style>
+    @keyframes flicker {
+        0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 72%, 100% {
+            opacity: 0.99;
+            text-shadow: 0 0 1px rgba(255,255,255,0.4);
+        }
+        20%, 21.999%, 63%, 63.999%, 65%, 71.999% {
+            opacity: 0.4;
+            text-shadow: none;
+        }
+    }
+    
+    @keyframes scanlines {
+        from { background-position: 0 0; }
+        to { background-position: 0 -20px; }
+    }
 
-        @keyframes flicker {
-            0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 72%, 100% {
-                opacity: 0.99;
-                text-shadow: 0 0 1px rgba(255,255,255,0.4);
-            }
-            20%, 21.999%, 63%, 63.999%, 65%, 71.999% {
-                opacity: 0.4;
-                text-shadow: none;
-            }
-        }
-        
-        @keyframes scanlines {
-            from { background-position: 0 0; }
-            to { background-position: 0 -20px; }
-        }
+    html {
+        font-size: 16px;
+    }
 
+    @media (max-width: 768px) {
+        html {
+            font-size: 14px;
+        }
+    }
 
-        
-body {
-    margin: 0;
-    padding: 0;
-    background-color: #111;
-    color: #ddd;
-    font-family: 'Courier New', monospace;
-    overflow: hidden;
-    position: relative;
-    height: 100vh;
-    animation: flicker 0.1s infinite alternate;
-    box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
-    border-radius: 5px;
-    cursor: none; 
-}
+    @media (max-width: 480px) {
+        html {
+            font-size: 12px;
+        }
+    }
 
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #111;
+        color: #ddd;
+        font-family: 'Courier New', monospace;
+        overflow: hidden;
+        position: relative;
+        height: 100vh;
+        width: 100vw;
+        animation: flicker 0.1s infinite alternate;
+        box-shadow: inset 0 0 60px rgba(0,0,0,0.8);
+        border-radius: 5px;
+        cursor: none;
+    }
+    
+    body::before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(
+            rgba(18, 16, 16, 0) 50%, 
+            rgba(0, 0, 0, 0.25) 50%
+        );
+        background-size: 100% 4px;
+        z-index: 1000;
+        pointer-events: none;
+        animation: scanlines 0.7s linear infinite;
+    }
 
+    body::after {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            ellipse at center,
+            rgba(0,0,0,0) 0%,
+            rgba(0,0,0,0.7) 100%
+        );
+        z-index: 1001;
+        pointer-events: none;
+    }
+    
+    .login-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 2000;
+    }
+    
+    .login-box {
+        background-color: #222;
+        border: 1px solid #444;
+        padding: 2rem;
+        width: 90%;
+        max-width: 300px;
+        text-align: center;
+        box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    
+    .profile-pic {
+        width: 100px;
+        height: 100px;
+        max-width: 20vw;
+        max-height: 20vw;
+        border-radius: 50%;
+        margin: 0 auto 20px;
+        border: 3px solid #444;
+        object-fit: cover;
+    }
+    
+    .welcome-text {
+        font-size: 1.125rem;
+        margin-bottom: 1.25rem;
+        color: #ddd;
+    }
+    
+    .password-input {
+        width: 100%;
+        padding: 0.625rem;
+        margin-bottom: 0.9375rem;
+        background-color: #111;
+        border: 1px solid #444;
+        color: #ddd;
+        font-family: 'Courier New', monospace;
+        outline: none;
+        box-sizing: border-box;
+    }
+    
+    .submit-btn {
+        background: linear-gradient(to bottom, #444, #222);
+        border: 1px solid #000;
+        color: #ddd;
+        padding: 0.5rem 1.25rem;
+        cursor: pointer;
+        font-family: 'Courier New', monospace;
+    }
+    
+    .submit-btn:hover {
+        background: linear-gradient(to bottom, #555, #333);
+    }
+    
+    .loading-dots {
+        display: none;
+        margin-top: 0.9375rem;
+    }
+    
+    .loading-dots span {
+        display: inline-block;
+        width: 0.5rem;
+        height: 0.5rem;
+        border-radius: 50%;
+        background-color: #ddd;
+        margin: 0 0.1875rem;
+        animation: bounce 1.4s infinite ease-in-out;
+    }
+    
+    .loading-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .loading-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes bounce {
+        0%, 80%, 100% { transform: scale(0); }
+        40% { transform: scale(1); }
+    }
+    
+    .desktop {
+        position: absolute;
+        inset: 0; 
+        background-color: #111;
+        background-image: url('./files/background.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        overflow: hidden;
+        padding: 2vw; 
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(5rem, 1fr));
+        grid-auto-rows: minmax(5.625rem, auto);
+        gap: 1.5vw;
+        align-content: start;
+    }
+    
+    .icon {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 5rem;
+        max-width: 20vw;
+        cursor: pointer;
+        text-align: center;
+        user-select: none;
+    }
+    
+    .icon:hover {
+        background-color: rgba(60, 60, 60, 0.5);
+        outline: 1px dotted #666;
+    }
+    
+    .icon:active {
+        background-color: rgba(40, 40, 40, 0.7);
+    }
+    
+    .icon img {
+        width: 3rem;
+        height: 3rem;
+        margin-bottom: 0.3125rem;
+        filter: grayscale(30%) brightness(0.8);
+    }
+    
+    .icon span {
+        font-size: 0.75rem;
+        color: #ddd;
+        text-shadow: 1px 1px 1px #000;
+        word-break: break-word;
+    }
 
-        
-body::before {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-        rgba(18, 16, 16, 0) 50%, 
-        rgba(0, 0, 0, 0.25) 50%
-    );
-    background-size: 100% 4px;
-    z-index: 1000;
-    pointer-events: none;
-    animation: scanlines 0.7s linear infinite;
-}
+    .window {
+        position: absolute;
+        border: 1px solid #333;
+        background-color: #222;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+        min-width: 18.75rem;
+        min-height: 12.5rem;
+        display: none;
+        flex-direction: column;
+        z-index: 100;
+        left: 3.125rem;
+        top: 3.125rem;
+    }
+    
+    @media (max-width: 768px) {
+        .window {
+            min-width: 80vw;
+            min-height: 50vh;
+            left: 10vw;
+            top: 10vh;
+        }
+    }
+    
+    .window.active {
+        display: flex;
+        z-index: 200;
+    }
+    
+    .window-header {
+        background: linear-gradient(to bottom, #444, #222);
+        color: #ddd;
+        padding: 0.3125rem 0.5rem;
+        font-size: 0.75rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #000;
+        user-select: none;
+        cursor: move;
+    }
+    
+    .window-title {
+        display: flex;
+        align-items: center;
+    }
+    
+    .window-title img {
+        width: 1rem;
+        height: 1rem;
+        margin-right: 0.3125rem;
+        filter: grayscale(30%) brightness(0.8);
+    }
+    
+    .window-controls {
+        display: flex;
+    }
+    
+    .window-btn {
+        width: 1rem;
+        height: 0.875rem;
+        margin-left: 0.1875rem;
+        background-color: #444;
+        border: 1px solid #000;
+        color: #ddd;
+        font-size: 0.625rem;
+        line-height: 0.75rem;
+        text-align: center;
+        cursor: pointer;
+    }
+    
+    .window-btn:hover {
+        background-color: #555;
+    }
+    
+    .window-btn.close:hover {
+        background-color: #c00;
+        color: #fff;
+    }
+    
+    .window-content {
+        flex-grow: 1;
+        padding: 0.3125rem;
+        overflow: auto;
+        background-color: #111;
+        color: #ddd;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+    }
 
-body::after {
-    content: "";
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: radial-gradient(
-        ellipse at center,
-        rgba(0,0,0,0) 0%,
-        rgba(0,0,0,0.7) 100%
-    );
-    z-index: 1001;
-    pointer-events: none;
-}
-        
-        .login-screen {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.8);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            z-index: 2000;
-        }
-        
-        .login-box {
-            background-color: #222;
-            border: 1px solid #444;
-            padding: 30px;
-            width: 300px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-        }
-        
-        .profile-pic {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin: 0 auto 20px;
-            border: 3px solid #444;
-            object-fit: cover;
-        }
-        
-        .welcome-text {
-            font-size: 18px;
-            margin-bottom: 20px;
-            color: #ddd;
-        }
-        
-        .password-input {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            background-color: #111;
-            border: 1px solid #444;
-            color: #ddd;
-            font-family: 'Courier New', monospace;
-            outline: none;
-        }
-        
-        .submit-btn {
-            background: linear-gradient(to bottom, #444, #222);
-            border: 1px solid #000;
-            color: #ddd;
-            padding: 8px 20px;
-            cursor: pointer;
-            font-family: 'Courier New', monospace;
-        }
-        
-        .submit-btn:hover {
-            background: linear-gradient(to bottom, #555, #333);
-        }
-        
-        .loading-dots {
-            display: none;
-            margin-top: 15px;
-        }
-        
-        .loading-dots span {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #ddd;
-            margin: 0 3px;
-            animation: bounce 1.4s infinite ease-in-out;
-        }
-        
-        .loading-dots span:nth-child(2) {
-            animation-delay: 0.2s;
-        }
-        
-        .loading-dots span:nth-child(3) {
-            animation-delay: 0.4s;
-        }
-        
-        @keyframes bounce {
-            0%, 80%, 100% { transform: scale(0); }
-            40% { transform: scale(1); }
-        }
-        
-.desktop {
-    position: absolute;
-    inset: 0; 
-    background-color: #111;
-    background-image: url('./files/background.png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    overflow: hidden;
-    padding: 2vw; 
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    grid-auto-rows: minmax(90px, auto);
-    gap: 1.5vw;
-    align-content: start;
-}
+    .notepad-content {
+        flex-grow: 1;
+        background-color: #111;
+        color: #ddd;
+        border: none;
+        resize: none;
+        font-family: 'Courier New', monospace;
+        padding: 0.3125rem;
+        outline: none;
+        width: 100%;
+        height: 100%;
+        box-sizing: border-box;
+    }
+    
+    .static {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: repeating-linear-gradient(
+            0deg,
+            rgba(0,0,0,0.15),
+            rgba(0,0,0,0.15) 1px,
+            transparent 1px,
+            transparent 2px
+        );
+        pointer-events: none;
+        z-index: 1002;
+        opacity: 0.1;
+        animation: static 0.1s infinite;
+    }
+    
+    @keyframes static {
+        0% { transform: translate(0px, 0px); }
+        20% { transform: translate(-1px, 1px); }
+        40% { transform: translate(1px, -1px); }
+        60% { transform: translate(-1px, -1px); }
+        80% { transform: translate(1px, 1px); }
+        100% { transform: translate(0px, 0px); }
+    }
 
+    .playlist-title {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: #ddd;
+        text-align: center;
+        margin: 0.625rem 0 -0.3125rem 0;
+        letter-spacing: 0.03125rem;
+        text-transform: lowercase;
+        opacity: 0.85;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .crt-cursor {
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        background-repeat: no-repeat;
+        background-size: contain;
+        animation: cursorFlicker 0.1s infinite alternate;
+        image-rendering: pixelated;
+        left: 0;
+        top: 0;
+    }
+
+    .crt-cursor.default {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-image: url('./files/cursor/default.png');
+    }
+
+    .crt-cursor.pointer {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-image: url('./files/cursor/pointer.png');
+    }
+
+    .crt-cursor.text {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-image: url('./files/cursor/text.png');
+        animation: cursorBlink 1.2s step-end infinite, cursorFlicker 0.1s infinite alternate;
+    }
+
+    .crt-cursor.drag {
+        width: 1.5rem;
+        height: 1.5rem;
+        background-image: url('./files/cursor/drag.png');
+    }
+
+    @keyframes cursorFlicker {
+        0%, 100% { opacity: 0.95; }
+        50% { opacity: 0.7; }
+    }
+
+    @keyframes cursorBlink {
+        0%, 60% { opacity: 1; }
+        61%, 100% { opacity: 0.3; }
+    }
+
+    html, body, * {
+        cursor: none !important;
+    }
+
+    @media (max-width: 480px) {
+        .desktop {
+            grid-template-columns: repeat(auto-fill, minmax(4rem, 1fr));
+            grid-auto-rows: minmax(4.5rem, auto);
+            gap: 1vw;
+        }
         
         .icon {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            width: 80px;
-            cursor: pointer;
-            text-align: center;
-            user-select: none;
-        }
-        
-        .icon:hover {
-            background-color: rgba(60, 60, 60, 0.5);
-            outline: 1px dotted #666;
-        }
-        
-        .icon:active {
-            background-color: rgba(40, 40, 40, 0.7);
+            width: 4rem;
         }
         
         .icon img {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 5px;
-            filter: grayscale(30%) brightness(0.8);
+            width: 2.5rem;
+            height: 2.5rem;
         }
         
-        .icon span {
-            font-size: 12px;
-            color: #ddd;
-            text-shadow: 1px 1px 1px #000;
-            word-break: break-word;
+        .login-box {
+            padding: 1.5rem;
         }
+    }
 
-        .window {
-            position: absolute;
-            border: 1px solid #333;
-            background-color: #222;
-            box-shadow: 2px 2px 10px rgba(0,0,0,0.5);
-            min-width: 300px;
-            min-height: 200px;
-            display: none;
-            flex-direction: column;
-            z-index: 100;
-            left: 50px;
-            top: 50px;
+    @media (orientation: portrait) {
+        .desktop {
+            grid-template-columns: repeat(auto-fill, minmax(4.5rem, 1fr));
         }
-        
-        .window.active {
-            display: flex;
-            z-index: 200;
-        }
-        
-        .window-header {
-            background: linear-gradient(to bottom, #444, #222);
-            color: #ddd;
-            padding: 5px 8px;
-            font-size: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #000;
-            user-select: none;
-            cursor: move;
-        }
-        
-        .window-title {
-            display: flex;
-            align-items: center;
-        }
-        
-        .window-title img {
-            width: 16px;
-            height: 16px;
-            margin-right: 5px;
-            filter: grayscale(30%) brightness(0.8);
-        }
-        
-        .window-controls {
-            display: flex;
-        }
-        
-        .window-btn {
-            width: 16px;
-            height: 14px;
-            margin-left: 3px;
-            background-color: #444;
-            border: 1px solid #000;
-            color: #ddd;
-            font-size: 10px;
-            line-height: 12px;
-            text-align: center;
-            cursor: pointer;
-        }
-        
-        .window-btn:hover {
-            background-color: #555;
-        }
-        
-        .window-btn.close:hover {
-            background-color: #c00;
-            color: #fff;
-        }
-        
-        .window-content {
-            flex-grow: 1;
-            padding: 5px;
-            overflow: auto;
-            background-color: #111;
-            color: #ddd;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .notepad-content {
-            flex-grow: 1;
-            background-color: #111;
-            color: #ddd;
-            border: none;
-            resize: none;
-            font-family: 'Courier New', monospace;
-            padding: 5px;
-            outline: none;
-            width: 100%;
-            height: 100%;
-            box-sizing: border-box;
-        }
-        
-
-        
-        .static {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: repeating-linear-gradient(
-                0deg,
-                rgba(0,0,0,0.15),
-                rgba(0,0,0,0.15) 1px,
-                transparent 1px,
-                transparent 2px
-            );
-            pointer-events: none;
-            z-index: 1002;
-            opacity: 0.1;
-            animation: static 0.1s infinite;
-        }
-        
-        @keyframes static {
-            0% { transform: translate(0px, 0px); }
-            20% { transform: translate(-1px, 1px); }
-            40% { transform: translate(1px, -1px); }
-            60% { transform: translate(-1px, -1px); }
-            80% { transform: translate(1px, 1px); }
-            100% { transform: translate(0px, 0px); }
-        }
-
-
-
-
-.playlist-title {
-    font-size: 14px;
-    font-weight: 500;
-    color: #ddd;
-    text-align: center;
-    margin: 10px 0 -5px 0;
-    letter-spacing: 0.5px;
-    text-transform: lowercase;
-    opacity: 0.85;
-    font-family: 'Segoe UI', sans-serif;
-}
-
-    </style>
-
-
-
-
-
-
-
-
-
-    <style>
-.crt-cursor {
-    position: fixed;
-    pointer-events: none;
-    z-index: 9999;
-    background-repeat: no-repeat;
-    background-size: contain;
-    animation: cursorFlicker 0.1s infinite alternate;
-    image-rendering: pixelated;
-    left: 0;
-    top: 0;
-}
-
-.crt-cursor.default {
-    width: 24px;
-    height: 24px;
-    background-image: url('./files/cursor/default.png');
-}
-
-.crt-cursor.pointer {
-    width: 24px;
-    height: 24px;
-    background-image: url('./files/cursor/pointer.png');
-}
-
-.crt-cursor.text {
-    width: 24px;
-    height: 24px;
-    background-image: url('./files/cursor/text.png');
-    animation: cursorBlink 1.2s step-end infinite, cursorFlicker 0.1s infinite alternate;
-}
-
-.crt-cursor.drag {
-    width: 24px;
-    height: 24px;
-    background-image: url('./files/cursor/drag.png');
-}
-
-@keyframes cursorFlicker {
-    0%, 100% { opacity: 0.95; }
-    50% { opacity: 0.7; }
-}
-
-@keyframes cursorBlink {
-    0%, 60% { opacity: 1; }
-    61%, 100% { opacity: 0.3; }
-}
-
-html, body, * {
-    cursor: none !important;
-}
-
-    </style>
+    }
+</style>
 </head>
 <body>
     <div class="static"></div>
@@ -500,13 +534,20 @@ html, body, * {
 
 
 <style>
-
-
 #spotify-window {
-    width: 500px;
-    height: 420px;
+    width: 90vw;
+    max-width: 500px;
+    height: 80vh;
+    max-height: 420px;
     background-color: #1a1a1a;
     border: 1px solid #333;
+}
+
+@media (max-width: 480px) {
+    #spotify-window {
+        width: 95vw;
+        height: 85vh;
+    }
 }
 
 #spotify-window .window-header {
@@ -516,33 +557,33 @@ html, body, * {
 
 #spotify-window .window-content {
     background-color: #111;
-    padding: 10px;
+    padding: 0.625rem;
     display: flex;
     flex-direction: column;
 }
 
 .playlist-title {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #ddd;
-    padding: 8px 12px;
+    padding: 0.5rem 0.75rem;
     background-color: #222;
-    border-radius: 4px;
-    margin-bottom: 10px;
+    border-radius: 0.25rem;
+    margin-bottom: 0.625rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    border-left: 3px solid #ff3366;
+    letter-spacing: 0.0625rem;
+    border-left: 0.1875rem solid #ff3366;
 }
 
 #song-list {
     flex: 1;
     overflow-y: auto;
-    margin-bottom: 10px;
+    margin-bottom: 0.625rem;
     scrollbar-width: thin;
     scrollbar-color: #444 #222;
 }
 
 #song-list::-webkit-scrollbar {
-    width: 6px;
+    width: 0.375rem;
 }
 
 #song-list::-webkit-scrollbar-track {
@@ -551,16 +592,16 @@ html, body, * {
 
 #song-list::-webkit-scrollbar-thumb {
     background-color: #444;
-    border-radius: 3px;
+    border-radius: 0.1875rem;
 }
 
 .song-item {
     display: flex;
     align-items: center;
-    padding: 10px 12px;
-    margin-bottom: 4px;
+    padding: 0.625rem 0.75rem;
+    margin-bottom: 0.25rem;
     background-color: #1a1a1a;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     transition: all 0.2s ease;
 }
 
@@ -570,47 +611,47 @@ html, body, * {
 
 .song-item.active {
     background-color: #333;
-    border-left: 3px solid #ff3366;
+    border-left: 0.1875rem solid #ff3366;
 }
 
 .song-number {
     color: #777;
-    width: 24px;
-    font-size: 12px;
+    width: 1.5rem;
+    font-size: 0.75rem;
     text-align: center;
 }
 
 .song-info {
     flex: 1;
-    margin-left: 10px;
+    margin-left: 0.625rem;
 }
 
 .song-title {
     color: #ddd;
-    font-size: 13px;
-    margin-bottom: 2px;
+    font-size: 0.8125rem;
+    margin-bottom: 0.125rem;
 }
 
 .song-artist {
     color: #999;
-    font-size: 11px;
+    font-size: 0.6875rem;
 }
 
 .song-duration {
     color: #777;
-    font-size: 11px;
-    margin-left: 10px;
+    font-size: 0.6875rem;
+    margin-left: 0.625rem;
 }
 
 .play-btn {
-    width: 24px;
-    height: 24px;
+    width: 1.5rem;
+    height: 1.5rem;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-left: 10px;
+    margin-left: 0.625rem;
     cursor: pointer;
     transition: all 0.2s ease;
 }
@@ -621,20 +662,20 @@ html, body, * {
 }
 
 .play-btn svg {
-    width: 12px;
-    height: 12px;
+    width: 0.75rem;
+    height: 0.75rem;
 }
 
 .player-controls {
     background-color: #222;
-    padding: 12px;
-    border-radius: 6px;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
 }
 
 .now-playing {
     color: #ddd;
-    font-size: 12px;
-    margin-bottom: 10px;
+    font-size: 0.75rem;
+    margin-bottom: 0.625rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -642,17 +683,17 @@ html, body, * {
 
 .progress-container {
     width: 100%;
-    height: 4px;
+    height: 0.25rem;
     background-color: #333;
-    margin-bottom: 12px;
-    border-radius: 2px;
+    margin-bottom: 0.75rem;
+    border-radius: 0.125rem;
     cursor: pointer;
 }
 
 .progress-bar {
     height: 100%;
     background: linear-gradient(to right, #ff3366, #ff6b6b);
-    border-radius: 2px;
+    border-radius: 0.125rem;
     width: 0%;
     transition: width 0.1s linear;
 }
@@ -661,15 +702,15 @@ html, body, * {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 0.75rem;
 }
 
 .control-btn {
-    width: 32px;
-    height: 32px;
+    width: 2rem;
+    height: 2rem;
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    margin: 0 8px;
+    margin: 0 0.5rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -682,8 +723,8 @@ html, body, * {
 }
 
 .control-btn.play-pause {
-    width: 40px;
-    height: 40px;
+    width: 2.5rem;
+    height: 2.5rem;
     background-color: rgba(255, 51, 102, 0.7);
 }
 
@@ -697,35 +738,36 @@ html, body, * {
 }
 
 .volume-icon {
-    margin-right: 10px;
+    margin-right: 0.625rem;
 }
 
 .volume-icon svg {
-    width: 16px;
-    height: 16px;
+    width: 1rem;
+    height: 1rem;
 }
 
 .volume-slider {
     flex: 1;
     -webkit-appearance: none;
-    height: 4px;
+    height: 0.25rem;
     background: #333;
-    border-radius: 2px;
+    border-radius: 0.125rem;
     outline: none;
 }
 
 .volume-slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 12px;
-    height: 12px;
+    width: 0.75rem;
+    height: 0.75rem;
     background: #ddd;
     cursor: pointer;
     border-radius: 50%;
 }
+
 @keyframes pulse-glow {
     0% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0.4); }
-    70% { box-shadow: 0 0 0 4px rgba(255, 51, 102, 0); }
+    70% { box-shadow: 0 0 0 0.25rem rgba(255, 51, 102, 0); }
     100% { box-shadow: 0 0 0 0 rgba(255, 51, 102, 0); }
 }
 
@@ -733,7 +775,7 @@ html, body, * {
     animation: pulse-glow 2s infinite;
     background-color: #ff3366;
 }
-    </style>
+</style>
 
 
 
@@ -1082,7 +1124,7 @@ function showRebootMessage() {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    zIndex: 1000000,            // above the canvas
+    zIndex: 1000000,
     color: '#ccc',
     fontFamily: 'Courier New, monospace',
     fontSize: '18px',
@@ -1100,17 +1142,17 @@ function showRebootMessage() {
 function runDontRun() {
   closeWindow('dontrun');
   let count = 0,
-      delay = 600,      // start faster, but not instantly
-      max = 200;        // more total messages
+      delay = 600,
+      max = 200;     
 
   function wave() {
-    const n = 2 + Math.floor(count / 15);  // slowly ramp up per wave
+    const n = 2 + Math.floor(count / 15);
     for (let i = 0; i < n; i++) {
       createErrorMessage();
       if (++count >= max) break;
     }
     if (count < max) {
-      delay = Math.max(100, delay * 0.9);  // shrink delay, but not drastically
+      delay = Math.max(100, delay * 0.9);
       setTimeout(wave, delay);
     } else {
       setTimeout(pixelateScreen, 300);
@@ -1124,26 +1166,30 @@ function runDontRun() {
 const errorStyle = document.createElement('style');
 errorStyle.textContent = `
 .win6-error-message {
-  width: 300px;
+  width: 90vw;
+  max-width: 300px;
   background: linear-gradient(to bottom, #d3d3d3, #b0b0b0);
   border: 1px solid #404040;
-  box-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+  box-shadow: 0.125rem 0.125rem 0 rgba(0,0,0,0.2);
   font-family: 'MS Sans Serif', Arial, sans-serif;
-  font-size: 12px;
+  font-size: clamp(0.75rem, 3vw, 0.875rem);
   color: #000;
 }
+
 .win6-error-header {
   background: linear-gradient(to right, #000080, #1084d0);
   color: white;
-  padding: 8px 10px;
+  padding: 0.5rem 0.625rem;
   display: flex;
   align-items: center;
   font-weight: bold;
   border-bottom: 1px solid #404040;
+  font-size: clamp(0.75rem, 3.5vw, 0.8125rem);
 }
+
 .win6-error-icon {
-  width: 20px;
-  height: 20px;
+  width: clamp(1.25rem, 6vw, 1.5rem);
+  height: clamp(1.25rem, 6vw, 1.5rem);
   background: #ff0;
   color: #000;
   border: 1px solid #404040;
@@ -1151,29 +1197,53 @@ errorStyle.textContent = `
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 10px;
+  margin-right: 0.625rem;
   font-weight: bold;
+  font-size: clamp(0.75rem, 4vw, 0.875rem);
 }
+
 .win6-error-content {
   background: #fff;
-  padding: 15px;
+  padding: clamp(0.75rem, 4vw, 1rem);
   text-align: center;
   border-bottom: 1px solid #808080;
+  line-height: 1.4;
 }
+
 .win6-error-footer {
-  padding: 10px;
+  padding: clamp(0.5rem, 3vw, 0.75rem);
   text-align: center;
 }
+
 .win6-error-btn {
-  padding: 4px 15px;
+  padding: 0.25rem 1rem;
   background: linear-gradient(to bottom, #d3d3d3, #b0b0b0);
   border: 1px solid #404040;
   cursor: pointer;
-  min-width: 80px;
+  min-width: 5rem;
+  font-size: clamp(0.6875rem, 3vw, 0.75rem);
 }
+
 .win6-error-btn:active {
   background: linear-gradient(to bottom, #b0b0b0, #909090);
   border-color: #000;
+}
+
+@media (max-width: 480px) {
+  .win6-error-message {
+    width: 85vw;
+  }
+  
+  .win6-error-btn {
+    min-width: 4.5rem;
+    padding: 0.25rem 0.75rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  .win6-error-message {
+    max-width: 280px;
+  }
 }
 `;
 document.head.appendChild(errorStyle);
@@ -1336,10 +1406,12 @@ folderStyle.textContent = `
 .folder-toolbar-btn {
     background: #d4d0c8;
     border: 1px solid transparent;
-    padding: 3px 12px;
+    padding: clamp(0.125rem, 1vw, 0.1875rem) clamp(0.5rem, 3vw, 0.75rem);
     font-family: 'MS Sans Serif', sans-serif;
-    font-size: 12px;
+    font-size: clamp(0.6875rem, 3vw, 0.75rem);
     cursor: pointer;
+    min-width: 4rem;
+    white-space: nowrap;
 }
 
 .folder-toolbar-btn:hover {
@@ -1351,11 +1423,13 @@ folderStyle.textContent = `
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 8px;
+    padding: clamp(0.25rem, 2vw, 0.5rem);
     cursor: pointer;
-    border-radius: 3px;
+    border-radius: 0.1875rem;
     background: #d4d0c8;
     border: 1px solid transparent;
+    width: 100%;
+    max-width: 6.25rem;
 }
 
 .folder-item:hover {
@@ -1368,12 +1442,12 @@ folderStyle.textContent = `
 }
 
 .folder-item-icon {
-    width: 80px;
-    height: 80px;
+    width: clamp(3.125rem, 16vw, 5rem);
+    height: clamp(3.125rem, 16vw, 5rem);
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 5px;
+    margin-bottom: 0.3125rem;
     overflow: hidden;
     background-color: white;
     border: 1px solid #808080;
@@ -1387,19 +1461,20 @@ folderStyle.textContent = `
 }
 
 .folder-item-name {
-    font-size: 12px;
+    font-size: clamp(0.625rem, 3vw, 0.75rem);
     color: black;
     text-align: center;
-    word-break: break-all;
-    max-width: 100%;
+    word-break: break-word;
+    width: 100%;
     font-family: 'MS Sans Serif', sans-serif;
     text-shadow: 1px 1px 0px white;
+    padding: 0 0.125rem;
+    line-height: 1.2;
 }
 
-
 .folder-view::-webkit-scrollbar {
-    width: 16px;
-    height: 16px;
+    width: clamp(0.75rem, 4vw, 1rem);
+    height: clamp(0.75rem, 4vw, 1rem);
 }
 
 .folder-view::-webkit-scrollbar-track {
@@ -1420,6 +1495,33 @@ folderStyle.textContent = `
 
 .folder-view::-webkit-scrollbar-thumb:hover {
     background: #c0c0c0;
+}
+
+@media (max-width: 480px) {
+    .folder-item {
+        max-width: 5rem;
+        padding: 0.25rem;
+    }
+    
+    .folder-item-icon {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .folder-item {
+        max-width: 4.5rem;
+    }
+    
+    .folder-item-icon {
+        width: 3rem;
+        height: 3rem;
+    }
+    
+    .folder-item-name {
+        font-size: 0.5625rem;
+    }
 }
 `;
 document.head.appendChild(folderStyle);
@@ -1443,43 +1545,50 @@ document.head.appendChild(folderStyle);
 
 
 <style>
-
 .taskbar {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
-    height: 40px;
+    height: clamp(2.5rem, 6vh, 3rem);
     background: rgba(30, 30, 30, 0.9);
-    backdrop-filter: blur(5px);
+    backdrop-filter: blur(0.3125rem);
     border-top: 1px solid #000;
     display: flex;
     align-items: center;
-    padding: 0 10px;
+    padding: 0 clamp(0.5rem, 2vw, 1rem);
     z-index: 1000;
-    box-shadow: 0 -2px 10px rgba(0,0,0,0.5);
-    display: none; 
+    box-shadow: 0 -0.125rem 0.625rem rgba(0,0,0,0.5);
+    display: none;
 }
 
 .taskbar-items {
     display: flex;
     height: 100%;
-    gap: 6px;
+    gap: clamp(0.25rem, 1vw, 0.5rem);
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.taskbar-items::-webkit-scrollbar {
+    display: none;
 }
 
 .taskbar-item {
-    height: 32px;
-    padding: 0 15px;
+    height: clamp(1.75rem, 4.5vh, 2.25rem);
+    padding: 0 clamp(0.5rem, 3vw, 1rem);
     background: rgba(50, 50, 50, 0.7);
     border: 1px solid rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
+    border-radius: 0.25rem;
     color: #ddd;
-    font-size: 12px;
+    font-size: clamp(0.625rem, 3vw, 0.75rem);
     display: flex;
     align-items: center;
     cursor: pointer;
     transition: all 0.2s ease;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .taskbar-item:hover {
@@ -1488,14 +1597,14 @@ document.head.appendChild(folderStyle);
 
 .taskbar-item.active {
     background: rgba(80, 80, 80, 0.9);
-    box-shadow: inset 0 1px 3px rgba(0,0,0,0.5);
+    box-shadow: inset 0 1px 0.1875rem rgba(0,0,0,0.5);
     border-color: rgba(0,0,0,0.5);
 }
 
 .taskbar-item img {
-    width: 16px;
-    height: 16px;
-    margin-right: 8px;
+    width: clamp(0.875rem, 4vw, 1.25rem);
+    height: clamp(0.875rem, 4vw, 1.25rem);
+    margin-right: clamp(0.25rem, 2vw, 0.5rem);
     filter: grayscale(30%) brightness(0.9);
 }
 
@@ -1505,18 +1614,18 @@ document.head.appendChild(folderStyle);
 
 .clock {
     margin-left: auto;
-    padding: 0 15px;
-    font-size: 12px;
+    padding: 0 clamp(0.5rem, 3vw, 1rem);
+    font-size: clamp(0.625rem, 3vw, 0.75rem);
     color: #ddd;
     background: rgba(40, 40, 40, 0.7);
-    height: 32px;
+    height: clamp(1.75rem, 4.5vh, 2.25rem);
     display: flex;
     align-items: center;
-    border-radius: 4px;
+    border-radius: 0.25rem;
     border: 1px solid rgba(0,0,0,0.3);
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.1);
+    flex-shrink: 0;
 }
-
 
 @keyframes taskbarPulse {
     0% { opacity: 0.8; }
@@ -1528,23 +1637,50 @@ document.head.appendChild(folderStyle);
     animation: taskbarPulse 1.5s infinite;
 }
 
-
 .helpy-container {
     position: fixed;
-    bottom: 45px; 
+    bottom: clamp(2.75rem, 7vh, 3.5rem); 
     left: 50%;
     transform: translateX(-50%);
-    z-index: 999; 
-    pointer-events: none; 
+    z-index: 999;
+    pointer-events: none;
+    width: 90%;
+    max-width: 20rem;
+    display: flex;
+    justify-content: center;
 }
 
 .helpy-gif {
-    width: 320px;
+    width: 100%;
     height: auto;
+    max-width: 20rem;
     animation: floaty 3s ease-in-out infinite;
 }
-</style>
 
+@media (max-width: 480px) {
+    .taskbar {
+        height: 2.75rem;
+    }
+    
+    .taskbar-item {
+        padding: 0 0.75rem;
+    }
+    
+    .clock {
+        padding: 0 0.75rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    .taskbar {
+        height: 2.25rem;
+    }
+    
+    .helpy-container {
+        bottom: 2.5rem;
+    }
+}
+</style>
 
 <div class="helpy-container">
   <img src="helpy.gif" alt="Helpy" class="helpy-gif">
@@ -1759,10 +1895,13 @@ function openWindow(id) {
 </div>
 
 <style>
-
 #discord-window {
     background-color: #36393f;
     border-color: #202225;
+    width: 90vw;
+    max-width: 400px;
+    height: 80vh;
+    max-height: 600px;
 }
 
 #discord-window .window-header {
@@ -1772,93 +1911,97 @@ function openWindow(id) {
 
 #discord-window .window-content {
     background-color: #36393f;
-    padding: 15px;
+    padding: clamp(0.75rem, 3vw, 1rem);
     color: #dcddde;
-    overflow: hidden; 
-    height: calc(100% - 40px); 
+    overflow: auto;
+    height: calc(100% - clamp(2rem, 5vh, 2.5rem));
 }
 
 .discord-profile {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: calc(100% - 30px);
+    height: calc(100% - clamp(1rem, 3vh, 1.5rem));
     box-sizing: border-box;
+    padding: 0.5rem;
 }
 
 .profile-header {
     position: relative;
-    margin-bottom: 15px;
+    margin-bottom: clamp(0.75rem, 2vh, 1rem);
 }
 
 .profile-picture {
-    width: 120px;
-    height: 120px;
+    width: clamp(5rem, 25vw, 7.5rem);
+    height: clamp(5rem, 25vw, 7.5rem);
     border-radius: 50%;
-    border: 5px solid #202225;
+    border: clamp(0.25rem, 1vw, 0.5rem) solid #202225;
     object-fit: cover;
 }
 
 .profile-badge {
     position: absolute;
-    bottom: 10px;
-    right: 5px;
+    bottom: clamp(0.5rem, 1.5vh, 0.75rem);
+    right: clamp(0.25rem, 1vw, 0.5rem);
     background-color: #3ba55c;
     color: white;
-    padding: 3px 8px;
-    border-radius: 10px;
-    font-size: 11px;
+    padding: clamp(0.125rem, 0.5vw, 0.25rem) clamp(0.5rem, 1vw, 0.75rem);
+    border-radius: clamp(0.5rem, 2vw, 0.75rem);
+    font-size: clamp(0.625rem, 3vw, 0.75rem);
     font-weight: bold;
 }
 
 .profile-username {
-    font-size: 22px;
+    font-size: clamp(1rem, 5vw, 1.5rem);
     font-weight: bold;
     color: white;
+    text-align: center;
 }
 
 .profile-discriminator {
     color: #b9bbbe;
-    font-size: 16px;
-    margin-bottom: 20px;
+    font-size: clamp(0.75rem, 4vw, 1rem);
+    margin-bottom: clamp(1rem, 3vh, 1.5rem);
+    text-align: center;
 }
 
 .profile-divider {
     width: 100%;
     height: 1px;
     background-color: #202225;
-    margin: 15px 0;
+    margin: clamp(0.75rem, 2vh, 1rem) 0;
 }
 
 .profile-section {
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: clamp(1rem, 3vh, 1.5rem);
 }
 
 .profile-section h3 {
     color: #b9bbbe;
-    font-size: 12px;
+    font-size: clamp(0.625rem, 3vw, 0.75rem);
     text-transform: uppercase;
-    margin-bottom: 10px;
+    margin-bottom: clamp(0.5rem, 1.5vh, 0.75rem);
 }
 
 .profile-section p {
-    margin: 5px 0;
-    font-size: 14px;
+    margin: clamp(0.25rem, 1vh, 0.5rem) 0;
+    font-size: clamp(0.75rem, 3.5vw, 0.875rem);
 }
 
 .activity {
     display: flex;
     align-items: center;
     background-color: #2f3136;
-    border-radius: 5px;
-    padding: 10px;
+    border-radius: clamp(0.25rem, 1vw, 0.5rem);
+    padding: clamp(0.5rem, 1.5vw, 0.75rem);
+    margin-bottom: clamp(0.5rem, 1.5vh, 0.75rem);
 }
 
 .activity-icon {
-    width: 24px;
-    height: 24px;
-    margin-right: 10px;
+    width: clamp(1.25rem, 6vw, 1.75rem);
+    height: clamp(1.25rem, 6vw, 1.75rem);
+    margin-right: clamp(0.5rem, 1.5vw, 0.75rem);
 }
 
 .activity-text {
@@ -1866,26 +2009,27 @@ function openWindow(id) {
 }
 
 .activity-name {
-    font-size: 14px;
+    font-size: clamp(0.75rem, 3.5vw, 0.875rem);
     color: white;
 }
 
 .activity-details {
-    font-size: 12px;
+    font-size: clamp(0.625rem, 3vw, 0.75rem);
     color: #b9bbbe;
 }
 
 .add-me-btn {
     margin-top: auto;
     width: 100%;
-    padding: 12px;
+    padding: clamp(0.5rem, 2vh, 0.75rem);
     background-color: #5865f2;
     color: white;
     border: none;
-    border-radius: 3px;
+    border-radius: clamp(0.125rem, 0.5vw, 0.25rem);
     font-weight: bold;
     cursor: pointer;
     transition: background-color 0.2s;
+    font-size: clamp(0.75rem, 3.5vw, 0.875rem);
 }
 
 .add-me-btn:hover {
@@ -1894,6 +2038,47 @@ function openWindow(id) {
 
 .add-me-btn:active {
     background-color: #3a45a5;
+}
+
+@media (max-width: 480px) {
+    #discord-window {
+        width: 95vw;
+        height: 85vh;
+    }
+    
+    .profile-picture {
+        width: 6rem;
+        height: 6rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    #discord-window {
+        height: 90vh;
+        max-height: none;
+    }
+    
+    .discord-profile {
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+    
+    .profile-header {
+        flex: 0 0 100%;
+    }
+    
+    .profile-section {
+        flex: 1;
+        min-width: 45%;
+        margin-right: 1rem;
+    }
+    
+    .add-me-btn {
+        position: fixed;
+        bottom: 1rem;
+        width: calc(100% - 2rem);
+    }
 }
 </style>
 
@@ -1972,8 +2157,8 @@ let currentCursorType = 'default';
 
 cursor.className = 'crt-cursor default';
 
-const xOffset = 0; // Horizontal adjustment (positive = right, negative = left)
-const yOffset = 0; // Vertical adjustment (positive = down, negative = up)
+const xOffset = 0;
+const yOffset = 0;
 
 document.addEventListener('mousemove', function(e) {
     cursor.style.left = (e.clientX + xOffset) + 'px';
